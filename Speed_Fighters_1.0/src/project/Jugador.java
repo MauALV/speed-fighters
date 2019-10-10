@@ -13,9 +13,9 @@ import engine.Game;
 public class Jugador extends ObjetoDeJuego {
 
 	private class Vec2 {
-		public int x, y;
+		public float x, y;
 
-		public Vec2(int _x, int _y) {
+		public Vec2(float _x, float _y) {
 			x = _x;
 			y = _y;
 		}
@@ -31,14 +31,17 @@ public class Jugador extends ObjetoDeJuego {
 	private Estado golpeando;
 	private Estado golpe_especial;
 	private Estado estado;
-	private boolean jugador1;
-
+	
+	private boolean jugador1, puedeSaltar;
+	private float gravedad = 0.2f;
+	
 	public Jugador() {
 		height = 100;
 		width = 30;
 		jugador1 = true;
+		puedeSaltar = true;
 		pos = new ArrayList<>();
-		hitbox = new Rectangle(posX, posY, width, height);
+		hitbox = new Rectangle((int) posX, (int) posY, (int) width, (int) height);
 		pos.add(new Vec2(posX, posY));
 
 	}
@@ -49,8 +52,9 @@ public class Jugador extends ObjetoDeJuego {
 		height = 100;
 		width = 30;
 		this.jugador1 = jugador1;
+		this.puedeSaltar = true;
 		pos = new ArrayList<>();
-		hitbox = new Rectangle(posX, posY, width, height);
+		hitbox = new Rectangle((int) posX, (int) posY, (int) width, (int) height);
 		pos.add(new Vec2(posX, posY));
 		this.spawn();
 	}
@@ -82,18 +86,18 @@ public class Jugador extends ObjetoDeJuego {
 	public void tick() {
 		Input input = Input.get();
 		if (isJugador1()) {
+
 			if (input.isKeyPressed(KeyEvent.VK_A))
 				posX -= 5;
 			if (input.isKeyPressed(KeyEvent.VK_D))
 				posX += 5;
-			if (input.isKeyPressed(KeyEvent.VK_W))
+			if (input.isKeyPressed(KeyEvent.VK_W) && puedeSaltar) {
 				posY -= 5;
-			if (input.isKeyPressed(KeyEvent.VK_S))
-				posY += 5;
-
-			hitbox.x = posX;
-			hitbox.y = posY;
-
+				puedeSaltar = false;
+			}
+			
+			hitbox.x = (int) posX;
+			hitbox.y = (int) posY;
 			pos.add(new Vec2(posX, posY));
 		}
 
@@ -102,32 +106,32 @@ public class Jugador extends ObjetoDeJuego {
 				posX -= 5;
 			if (input.isKeyPressed(KeyEvent.VK_RIGHT))
 				posX += 5;
-			if (input.isKeyPressed(KeyEvent.VK_UP))
-				posY -= 5;
-			if (input.isKeyPressed(KeyEvent.VK_DOWN))
-				posY += 5;
-
-			hitbox.x = posX;
-			hitbox.y = posY;
-
+			if (input.isKeyPressed(KeyEvent.VK_UP) && puedeSaltar) {
+				posY -= 25;
+				puedeSaltar = false;
+			}
+			
+			hitbox.x = (int) posX;
+			hitbox.y = (int) posY;
 			pos.add(new Vec2(posX, posY));
 		}
 
 	}
 
 	public boolean collides(ObjetoDeJuego obj) {
+		System.out.println("Camara");
 		return hitbox.intersects(obj.getHitbox());
+		
 	}
 
 	@Override
 	public void render(Graphics2D g) {
 		if (isJugador1()) {
 			g.setColor(Color.RED);
-			g.fillRect(posX, posY, width, height);
-		}
-		else {
+			g.fillRect((int) posX, (int) posY, (int) width, (int) height);
+		} else {
 			g.setColor(Color.BLUE);
-			g.fillRect(posX, posY, width, height);
+			g.fillRect((int) posX, (int) posY, (int) width, (int) height);
 		}
 
 	}

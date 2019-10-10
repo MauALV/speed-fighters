@@ -11,13 +11,13 @@ public class Piso extends ObjetoDeJuego {
 		posX = 0;
 		posY = 556;
 		width = Game.WIDTH;
-		height = 20; 
+		height = 20;
 	}
 
 	@Override
 	public void render(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(posX, posY, width, height);
+		g.fillRect((int) posX, (int) posY, (int) width, (int) height);
 
 	}
 }

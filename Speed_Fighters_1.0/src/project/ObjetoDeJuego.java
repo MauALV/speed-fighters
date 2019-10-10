@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 public abstract class ObjetoDeJuego {
 
-	protected int height, posX, posY, width;
+	protected float height, posX, posY, width;
 	protected Rectangle hitbox;
 
 	public ObjetoDeJuego() {
@@ -15,30 +15,30 @@ public abstract class ObjetoDeJuego {
 		width = 0;
 	}
 
-	public ObjetoDeJuego(int x, int y, int h, int w) {
+	public ObjetoDeJuego(float x, float y, float h, float w) {
 		this.posX = x;
 		this.posY = y;
 		this.height = h;
 		this.width = w;
 	}
 	
-	public int getHeight() {
+	public float getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(float height) {
 		this.height = height;
 	}
 
-	public int getPosX() {
+	public float getPosX() {
 		return posX;
 	}
 
-	public void setPosX(int posX) {
+	public void setPosX(float posX) {
 		this.posX = posX;
 	}
 
-	public int getPosY() {
+	public float getPosY() {
 		return posY;
 	}
 
@@ -46,11 +46,11 @@ public abstract class ObjetoDeJuego {
 		this.posY = posY;
 	}
 
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public void setWidth(float width) {
 		this.width = width;
 	}
 	
