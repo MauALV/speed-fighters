@@ -9,6 +9,7 @@ import engine.Game;
 import engine.Input;
 
 public class Nivel {
+	private SpeedFighters speedfighters;
 	private String mapStr;
 	private Tile mapa[][];
 	private int gridW, gridH;
@@ -18,13 +19,13 @@ public class Nivel {
 	private boolean gameOver;
 
 	public Nivel() {
+		speedfighters = new SpeedFighters();
 		gameOver = false;
 		tileSize = 32;
 		gridW = Game.WIDTH / tileSize;
 		gridH = Game.HEIGHT / tileSize;
 		mapa = new Tile[gridH][gridW];
 		mapStr = "";
-		
 
 		crearNivel();
 	}
@@ -43,11 +44,11 @@ public class Nivel {
 		mapStr += "                                ";
 		mapStr += "                                ";
 		mapStr += "                                ";
+		mapStr += "                                ";
+		mapStr += "                                ";
+		mapStr += "                                ";
+		mapStr += "                                ";
 		mapStr += "     *****           *****      ";
-		mapStr += "                                ";
-		mapStr += "                                ";
-		mapStr += "                                ";
-		mapStr += "                                ";
 		mapStr += "                                ";
 		mapStr += "********************************";
 
@@ -71,27 +72,25 @@ public class Nivel {
 				mapa[y][x].render(g);
 			}
 		}
-		
-		if(gameOver) {
+
+		if (gameOver) {
 			Font font = new Font("Helvetica", Font.BOLD, 48);
 			g.setFont(font);
 			g.setColor(Color.RED);
-			g.drawString("GAME OVER", Game.WIDTH/2-128, Game.HEIGHT/2);
+			g.drawString("GAME OVER", Game.WIDTH / 2 - 128, Game.HEIGHT / 2);
 		}
 	}
 
 	public void tick() {
-		jugador1.tick();
-		jugador2.tick();
+		if (Input.get().isKeyPressed(KeyEvent.VK_SPACE) && gameOver) { // NO JALA YET
+			speedfighters.init();
+		}
 		if (gameOver)
 			return;
+		jugador1.tick();
+		jugador2.tick();
 		if (jugador1.collides(jugador2))
 			gameOver = true;
-		if (Input.get().isKeyPressed(KeyEvent.VK_SPACE) && gameOver) { //NO JALA YET
-			gameOver=false;
-			tick();
-		}
-		System.out.println(gameOver);
 		
 	}
 

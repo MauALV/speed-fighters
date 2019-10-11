@@ -31,10 +31,10 @@ public class Jugador extends ObjetoDeJuego {
 	private Estado golpeando;
 	private Estado golpe_especial;
 	private Estado estado;
-	
+
 	private boolean jugador1, puedeSaltar;
-	private float gravedad = 0.2f;
-	
+	private float aceleracion = 0.2f;
+
 	public Jugador() {
 		height = 100;
 		width = 30;
@@ -47,8 +47,6 @@ public class Jugador extends ObjetoDeJuego {
 	}
 
 	public Jugador(boolean jugador1) {
-		posX = 50; // tentativo
-		posY = 476; // tentativo
 		height = 100;
 		width = 30;
 		this.jugador1 = jugador1;
@@ -68,7 +66,7 @@ public class Jugador extends ObjetoDeJuego {
 	}
 
 	public void spawn() {
-		posY = 476; // tentativo
+		posY = 444; // tentativo
 		if (this.isJugador1())
 			posX = 50; // tentativo
 		else
@@ -83,18 +81,34 @@ public class Jugador extends ObjetoDeJuego {
 
 	}
 
+	public void salta() {
+		posY -= aceleracion;
+		aceleracion -= 9;
+	}
+
 	public void tick() {
 		Input input = Input.get();
-		if (isJugador1()) {
 
-			if (input.isKeyPressed(KeyEvent.VK_A))
-				posX -= 5;
+		if (isJugador1()) {
+			System.out.println("[J1] = (" + posX + ", " + posY + ")");
+			if (input.isKeyPressed(KeyEvent.VK_A)) {
+				posX -= 4;
+			}
 			if (input.isKeyPressed(KeyEvent.VK_D))
-				posX += 5;
+				posX += 4;
 			if (input.isKeyPressed(KeyEvent.VK_W) && puedeSaltar) {
-				posY -= 5;
+				salta();
 				puedeSaltar = false;
 			}
+
+			if (posY >= 444) { //cambiar por colision con un bloque solido
+				posY = 444;	   //ahorita esta para cuando toque el piso	
+				puedeSaltar = true;
+				aceleracion = 0.2f;
+			}
+			
+			posY += aceleracion;
+			aceleracion += .26;		
 			
 			hitbox.x = (int) posX;
 			hitbox.y = (int) posY;
@@ -102,15 +116,25 @@ public class Jugador extends ObjetoDeJuego {
 		}
 
 		else {
+			System.out.println("[J2] = (" + posX + ", " + posY + ")");
 			if (input.isKeyPressed(KeyEvent.VK_LEFT))
-				posX -= 5;
+				posX -= 4;
 			if (input.isKeyPressed(KeyEvent.VK_RIGHT))
-				posX += 5;
+				posX += 4;
 			if (input.isKeyPressed(KeyEvent.VK_UP) && puedeSaltar) {
-				posY -= 25;
+				salta();
 				puedeSaltar = false;
 			}
-			
+
+			posY += aceleracion;
+			aceleracion += .26;
+
+			if (posY >= 444) {
+				posY = 444;
+				puedeSaltar = true;
+				aceleracion = 0.2f;
+			}
+
 			hitbox.x = (int) posX;
 			hitbox.y = (int) posY;
 			pos.add(new Vec2(posX, posY));
@@ -119,9 +143,8 @@ public class Jugador extends ObjetoDeJuego {
 	}
 
 	public boolean collides(ObjetoDeJuego obj) {
-		System.out.println("Camara");
 		return hitbox.intersects(obj.getHitbox());
-		
+
 	}
 
 	@Override

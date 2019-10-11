@@ -18,7 +18,7 @@ public class BloqueSolido extends Tile{
 	
 	@Override
 	public void render(Graphics2D g) {
-		g.setColor(Color.WHITE);
+		g.setColor(Color.MAGENTA);
 		g.fillRect(tileX, tileY, width, height);
 		
 	}
