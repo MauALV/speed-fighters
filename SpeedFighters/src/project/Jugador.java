@@ -15,7 +15,7 @@ public class Jugador extends ObjetoDeJuego {
 	 * private Estado golpe_especial; private Estado estado;
 	 */
 
-	private boolean jugador1, puedeSaltar, mirandoDerecha, estaGolpeando;
+	private boolean jugador1, puedeSaltar, mirandoDerecha, estaGolpeando, puedeDobleSalto, estaSaltando, atacandoEspecial;
 	private float gravedad = 0.2f;
 	int hitWidth = 50;
 	int hitHeight = 20;
@@ -31,6 +31,9 @@ public class Jugador extends ObjetoDeJuego {
 		this.jugador1 = jugador1;
 		puedeSaltar = true;
 		estaGolpeando = false;
+		puedeDobleSalto = false;
+		atacandoEspecial = false;
+		estaSaltando = false;
 		hitbox = new Rectangle((int) posX, (int) posY, (int) width, (int) height);
 		this.spawn();
 	}
@@ -81,6 +84,7 @@ public class Jugador extends ObjetoDeJuego {
 		Input input = Input.get();
 
 		if (isJugador1()) {
+			//ddwSystem.out.println(atacandoEspecial);
 			hp -= 0.1;
 			if (input.isKeyPressed(KeyEvent.VK_A)) {
 				mirandoDerecha = false;
@@ -94,22 +98,44 @@ public class Jugador extends ObjetoDeJuego {
 				if (!input.isKeyPressed(KeyEvent.VK_A))
 					hp += 0.3;
 			}
-			if (input.isKeyPressed(KeyEvent.VK_SPACE)) {
+			// Controlar el golpe
+			if (input.isKeyPressed(KeyEvent.VK_G)) {
 				estaGolpeando = true;
 			}
+			
+			// Controlar el salto y el salto doble
 			if (input.isKeyPressed(KeyEvent.VK_W) && puedeSaltar) {
 				salta();
 				puedeSaltar = false;
+				estaSaltando = true;
+			}
+			if (input.isKeyReleased(KeyEvent.VK_W) && estaSaltando) {
+				puedeDobleSalto = true;
+				estaSaltando = false;
+			}
+		
+			if (input.isKeyPressed(KeyEvent.VK_W) && !puedeSaltar && puedeDobleSalto) {
+				gravedad = 0.2f;
+				puedeDobleSalto = false;
+				salta();
 			}
 			if (input.isKeyPressed(KeyEvent.VK_S) && !puedeSaltar) {
 				if (!input.isKeyPressed(KeyEvent.VK_W))
 					gravedad += 1;
 			}
+			
+			if (input.isKeyPressed(KeyEvent.VK_H) && sp == 100) {
+				sp = 0;
+				atacandoEspecial = true;
+			}
 
+			//Controlar los limites de la vida del jugador 1
 			if (hp >= 100)
 				hp = 100;
 			if (hp <= 0)
 				hp = 0;
+			
+			//Controlar los limites del contador especial del jugador 1
 
 			if (sp >= 100)
 				sp = 100;
@@ -153,11 +179,27 @@ public class Jugador extends ObjetoDeJuego {
 			if (input.isKeyPressed(KeyEvent.VK_UP) && puedeSaltar) {
 				salta();
 				puedeSaltar = false;
+				estaSaltando = true;
+			}
+			if (input.isKeyReleased(KeyEvent.VK_UP) && estaSaltando) {
+				puedeDobleSalto = true;
+				estaSaltando = false;
+			}
+		
+			if (input.isKeyPressed(KeyEvent.VK_UP) && !puedeSaltar && puedeDobleSalto) {
+				gravedad = 0.2f;
+				puedeDobleSalto = false;
+				salta();
 			}
 
 			if (input.isKeyPressed(KeyEvent.VK_DOWN) && !puedeSaltar) {
 				if (!input.isKeyPressed(KeyEvent.VK_UP))
 					gravedad += 1;
+			}
+			
+			if (input.isKeyPressed(KeyEvent.VK_NUMPAD1) && sp == 100) {
+				sp = 0;
+				atacandoEspecial = true;
 			}
 
 			if (hp >= 100)
@@ -208,6 +250,7 @@ public class Jugador extends ObjetoDeJuego {
 			g.fillRect(hitX, hitY, hitWidth, hitHeight);
 			estaGolpeando = false;
 		}
+		
 	}
 
 	public boolean conectaGolpe(Jugador otroJugador) {
@@ -254,5 +297,14 @@ public class Jugador extends ObjetoDeJuego {
 	public void setSp(float sp) {
 		this.sp = sp;
 	}
+
+	public boolean isAtacandoEspecial() {
+		return atacandoEspecial;
+	}
+
+	public void setAtacandoEspecial(boolean atacandoEspecial) {
+		this.atacandoEspecial = atacandoEspecial;
+	}
+	
 
 }

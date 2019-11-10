@@ -20,4 +20,10 @@ public class Special extends HUD {
 
 	}
 
+	@Override
+	public void renderDynamic(Graphics2D g, float hp) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

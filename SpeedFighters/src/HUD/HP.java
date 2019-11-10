@@ -13,10 +13,23 @@ public class HP extends HUD {
 		height = 20;
 	}
 
+	public void renderDynamic(Graphics2D g, float hp) {
+	
+		if(hp >= 75)
+			g.setColor(Color.green);
+		else if (hp >= 50)
+			g.setColor(Color.YELLOW);
+		else if (hp >= 25)
+			g.setColor(Color.ORANGE);
+		else if (hp < 25)
+			g.setColor(Color.RED);
+		g.fillRect((int) posX + 1, (int) posY + 1, (int) width - 1, (int) height - 1);
+	}
+
 	@Override
 	public void render(Graphics2D g) {
-		g.setColor(Color.green);
-		g.fillRect((int) posX + 1, (int) posY + 1, (int) width - 1, (int) height - 1);
+		// TODO Auto-generated method stub
+		
 	}
 
 }

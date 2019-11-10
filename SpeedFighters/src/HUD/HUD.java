@@ -21,4 +21,6 @@ public abstract class HUD extends ObjetoDeJuego {
 
 	public abstract void render(Graphics2D g);
 
+	public abstract void renderDynamic(Graphics2D g, float hp);
+
 }
